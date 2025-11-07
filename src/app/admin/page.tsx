@@ -10,8 +10,6 @@ import TagChip from '@/components/TagChip';
 import { getCurrentUser } from '@/lib/auth';
 import { Post, listAllMyPosts, deletePost } from '@/lib/posts';
 import { formatDate, getReadingTimeText } from '@/lib/time';
-import { storage } from '@/lib/firebase';
-import { ref, deleteObject } from 'firebase/storage';
 
 type FilterType = 'all' | 'published' | 'draft';
 
@@ -78,23 +76,8 @@ export default function AdminPage() {
       // Delete the Firestore document
       await deletePost(postToDelete.id);
 
-      // Delete cover image from Storage if it exists
-      if (postToDelete.coverImageUrl && storage) {
-        try {
-          // Extract the file path from the URL
-          // Assuming format: https://firebasestorage.googleapis.com/.../{path}
-          const url = new URL(postToDelete.coverImageUrl);
-          const pathMatch = url.pathname.match(/\/o\/(.+?)\?/);
-          if (pathMatch) {
-            const filePath = decodeURIComponent(pathMatch[1]);
-            const imageRef = ref(storage, filePath);
-            await deleteObject(imageRef);
-          }
-        } catch (imgError) {
-          console.warn('Failed to delete cover image:', imgError);
-          // Continue even if image deletion fails
-        }
-      }
+      // Note: Images hosted on Cloudinary remain accessible via their URLs
+      // Consider implementing Cloudinary deletion API if needed for your use case
 
       // Remove from local state
       setPosts((prev) => prev.filter((p) => p.id !== postToDelete.id));

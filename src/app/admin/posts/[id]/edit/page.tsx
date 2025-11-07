@@ -8,8 +8,7 @@ import MarkdownEditor from '@/components/MarkdownEditor';
 import { getCurrentUser } from '@/lib/auth';
 import { getPostById, updatePost } from '@/lib/posts';
 import { isValidSlug } from '@/lib/slug';
-import { storage } from '@/lib/firebase';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { uploadToCloudinary, validateImageFile } from '@/lib/cloudinary';
 
 interface FormData {
   title: string;
@@ -165,26 +164,30 @@ export default function EditPostPage() {
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = e.target.files?.[0];
-    if (!file || !storage) return;
+    if (!file) return;
+
+    // Validate file
+    const validationError = validateImageFile(file);
+    if (validationError) {
+      setErrors((prev) => ({
+        ...prev,
+        coverImage: validationError,
+      }));
+      return;
+    }
 
     setUploadingCover(true);
     setErrors((prev) => ({ ...prev, coverImage: undefined }));
 
     try {
-      const timestamp = Date.now();
-      const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
-      const filePath = `blog-covers/${timestamp}_${sanitizedName}`;
-
-      const storageRef = ref(storage, filePath);
-      await uploadBytes(storageRef, file);
-      const downloadURL = await getDownloadURL(storageRef);
-
+      const downloadURL = await uploadToCloudinary(file);
       setFormData((prev) => ({ ...prev, coverImageUrl: downloadURL }));
     } catch (error) {
       console.error('Error uploading cover image:', error);
       setErrors((prev) => ({
         ...prev,
-        coverImage: 'Failed to upload cover image',
+        coverImage:
+          error instanceof Error ? error.message : 'Failed to upload cover image',
       }));
     } finally {
       setUploadingCover(false);

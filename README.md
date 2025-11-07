@@ -110,9 +110,6 @@ A production-ready portfolio website featuring a blog with markdown editor, auth
      - Click "Create database"
      - Start in production mode (we'll add rules later)
      - Choose a location close to your users
-   - **Storage:** Go to Storage
-     - Click "Get started"
-     - Start in production mode (we'll add rules later)
 
    c. **Get your Firebase configuration:**
    - In Firebase Console, go to Project Settings (gear icon)
@@ -182,7 +179,7 @@ A production-ready portfolio website featuring a blog with markdown editor, auth
    }
    ```
 
-5. **Create your first user:**
+6. **Create your first user:**
 
    You need to create a user account to access the admin dashboard:
 
@@ -384,9 +381,10 @@ This will create 2 published posts and 1 draft (requires authentication setup).
      NEXT_PUBLIC_FIREBASE_API_KEY
      NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
      NEXT_PUBLIC_FIREBASE_PROJECT_ID
-     NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
      NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
      NEXT_PUBLIC_FIREBASE_APP_ID
+     NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
+     NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
      ```
 
 5. **Redeploy with environment variables:**
@@ -398,10 +396,11 @@ This will create 2 published posts and 1 draft (requires authentication setup).
 
 - [ ] Update Firebase authorized domains (Authentication > Settings > Authorized domains)
 - [ ] Add your domain: `your-domain.vercel.app`
+- [ ] Verify Cloudinary environment variables are set in Vercel
 - [ ] Update `metadataBase` in `src/app/layout.tsx` with your domain
 - [ ] Update sitemap URL in `public/robots.txt`
 - [ ] Test authentication on production
-- [ ] Verify image uploads work
+- [ ] Verify image uploads work (should use Cloudinary, not fallback)
 - [ ] Check all routes are accessible
 
 ## 📸 Screenshots

@@ -2,8 +2,7 @@
 
 import { useRef, useState } from 'react';
 import MarkdownRenderer from './MarkdownRenderer';
-import { storage } from '@/lib/firebase';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { uploadToCloudinary, validateImageFile } from '@/lib/cloudinary';
 
 interface MarkdownEditorProps {
   value: string;
@@ -87,11 +86,13 @@ export default function MarkdownEditor({
   };
 
   /**
-   * Handle image upload to Firebase Storage
+   * Handle image upload to Cloudinary
    */
   const handleImageUpload = async (file: File) => {
-    if (!storage) {
-      setUploadError('Firebase Storage is not initialized');
+    // Validate file
+    const validationError = validateImageFile(file);
+    if (validationError) {
+      setUploadError(validationError);
       return;
     }
 
@@ -99,24 +100,17 @@ export default function MarkdownEditor({
     setUploadError(null);
 
     try {
-      // Create a unique filename
-      const timestamp = Date.now();
-      const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
-      const filePath = `blog-images/${timestamp}_${sanitizedName}`;
-
-      // Upload to Storage
-      const storageRef = ref(storage, filePath);
-      await uploadBytes(storageRef, file);
-
-      // Get download URL
-      const downloadURL = await getDownloadURL(storageRef);
+      // Upload to Cloudinary
+      const downloadURL = await uploadToCloudinary(file);
 
       // Insert markdown image syntax
-      const altText = sanitizedName.replace(/\.[^/.]+$/, ''); // Remove extension
+      const altText = file.name.replace(/\.[^/.]+$/, ''); // Remove extension
       insertAtCursor(`![${altText}](${downloadURL})`);
     } catch (error) {
       console.error('Error uploading image:', error);
-      setUploadError('Failed to upload image');
+      setUploadError(
+        error instanceof Error ? error.message : 'Failed to upload image'
+      );
     } finally {
       setUploading(false);
     }
