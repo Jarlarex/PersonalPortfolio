@@ -347,6 +347,86 @@ This will create 2 published posts and 1 draft (requires authentication setup).
 3. Update `scripts/seed.ts` with your user ID
 4. Run `npm run seed`
 
+## 🖼️ Image Handling - Three Input Modes
+
+The project supports **three ways to add images**, both in the **Markdown Editor** (for content images) and **Cover Image field** (on New/Edit Post pages):
+
+### 1. 🌐 Upload to Cloudinary (Recommended for Production)
+
+**Where:** Markdown Editor "Upload" tab, or "Upload from Computer" button on post forms
+
+**How it works:**
+- Click upload button or choose file
+- Image uploads to Cloudinary via unsigned preset
+- Returns optimized CDN URL with automatic compression
+- URL inserted into markdown or set as cover image
+
+**Best for:** Production use, permanent hosting, automatic optimization
+
+**Example result:** `![image](https://res.cloudinary.com/your-cloud/image/upload/v123/blog-images/image.jpg)`
+
+### 2. 🔗 External URL
+
+**Where:** Markdown Editor "URL" tab, or URL input field on post forms
+
+**How it works:**
+- Paste any HTTPS image URL
+- Validates URL format
+- Inserts directly into markdown or cover field
+- No upload needed
+
+**Best for:** Images already hosted elsewhere, quick testing, external CDN images
+
+**Example:** Paste `https://example.com/photo.jpg` directly
+
+### 3. 📦 Inline Data URL (Dev Only)
+
+**Where:** Markdown Editor "Inline" tab only
+
+**How it works:**
+- Select image file < 200KB
+- Converts to base64 data URL
+- Embeds directly in markdown content
+- ⚠️ Increases document size significantly
+
+**Best for:** Local development, testing without Cloudinary configured
+
+**⚠️ Warning:** This mode is **development-only**. Do not use in production:
+- Increases database document size
+- No optimization or compression
+- Slows down page loads
+- Console warning shown if Cloudinary not configured
+
+### How to Choose
+
+| Mode | Production | Development | Best Use Case |
+|------|-----------|-------------|---------------|
+| **Upload to Cloudinary** | ✅ Yes | ✅ Yes | Permanent hosting, auto-optimization |
+| **External URL** | ✅ Yes | ✅ Yes | Already-hosted images, external CDN |
+| **Inline Data URL** | ❌ No | ✅ Yes | Quick testing without Cloudinary |
+
+### Cover Image Priority
+
+On New/Edit Post pages, if you provide **both** an upload and a URL:
+- **Uploaded image takes priority**
+- URL input is cleared when file is uploaded
+- This prevents confusion about which image will be used
+
+### Markdown Editor Dialog
+
+Click the 🖼️ **Image** button in the toolbar to open the dialog with three tabs:
+
+1. **Upload Tab:** File picker → Cloudinary → inserts `![alt](cloudinary-url)`
+2. **URL Tab:** Paste URL + alt text → inserts `![alt](your-url)`
+3. **Inline Tab:** File picker <200KB → inserts `![alt](data:image/...)`
+
+### Production Setup
+
+For production deployments:
+1. ✅ Configure Cloudinary (cloud name + upload preset)
+2. ✅ Use Upload or External URL modes only
+3. ❌ Do not rely on Inline mode (it will warn in console)
+
 ## 🚀 Deployment to Vercel
 
 ### Quick Deploy

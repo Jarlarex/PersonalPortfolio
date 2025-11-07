@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import MarkdownRenderer from './MarkdownRenderer';
-import { uploadToCloudinary, validateImageFile } from '@/lib/cloudinary';
+import ImageInsertDialog from './ImageInsertDialog';
 
 interface MarkdownEditorProps {
   value: string;
@@ -19,8 +19,7 @@ export default function MarkdownEditor({
   placeholder = 'Write your content here...',
 }: MarkdownEditorProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [uploading, setUploading] = useState(false);
-  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [imageDialogOpen, setImageDialogOpen] = useState(false);
 
   /**
    * Insert text at cursor position
@@ -86,50 +85,10 @@ export default function MarkdownEditor({
   };
 
   /**
-   * Handle image upload to Cloudinary
+   * Handle image insertion from dialog
    */
-  const handleImageUpload = async (file: File) => {
-    // Validate file
-    const validationError = validateImageFile(file);
-    if (validationError) {
-      setUploadError(validationError);
-      return;
-    }
-
-    setUploading(true);
-    setUploadError(null);
-
-    try {
-      // Upload to Cloudinary
-      const downloadURL = await uploadToCloudinary(file);
-
-      // Insert markdown image syntax
-      const altText = file.name.replace(/\.[^/.]+$/, ''); // Remove extension
-      insertAtCursor(`![${altText}](${downloadURL})`);
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      setUploadError(
-        error instanceof Error ? error.message : 'Failed to upload image'
-      );
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  /**
-   * Trigger file picker for image upload
-   */
-  const triggerImageUpload = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (file) {
-        handleImageUpload(file);
-      }
-    };
-    input.click();
+  const handleImageInsert = (imageUrl: string, altText: string) => {
+    insertAtCursor(`![${altText}](${imageUrl})`);
   };
 
   const toolbarButtons = [
@@ -208,24 +167,16 @@ export default function MarkdownEditor({
         {/* Divider */}
         <div className="mx-1 w-px bg-gray-300 dark:bg-gray-700" />
 
-        {/* Image Upload Button */}
+        {/* Image Insert Button */}
         <button
           type="button"
-          onClick={triggerImageUpload}
-          disabled={uploading}
-          title="Upload Image"
-          className="rounded px-3 py-1.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50 dark:text-gray-300 dark:hover:bg-gray-800"
+          onClick={() => setImageDialogOpen(true)}
+          title="Insert Image"
+          className="rounded px-3 py-1.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-800"
         >
-          {uploading ? '⏳' : '🖼️'} Image
+          🖼️ Image
         </button>
       </div>
-
-      {/* Upload Error */}
-      {uploadError && (
-        <div className="border border-t-0 border-red-300 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-400">
-          {uploadError}
-        </div>
-      )}
 
       {/* Two-Pane Editor */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
@@ -260,6 +211,13 @@ export default function MarkdownEditor({
           </div>
         </div>
       </div>
+
+      {/* Image Insert Dialog */}
+      <ImageInsertDialog
+        isOpen={imageDialogOpen}
+        onClose={() => setImageDialogOpen(false)}
+        onInsert={handleImageInsert}
+      />
     </div>
   );
 }

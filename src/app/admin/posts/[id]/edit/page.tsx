@@ -52,6 +52,7 @@ export default function EditPostPage() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
+  const [coverImageUrlInput, setCoverImageUrlInput] = useState('');
   const [autoSaving, setAutoSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
@@ -181,7 +182,9 @@ export default function EditPostPage() {
 
     try {
       const downloadURL = await uploadToCloudinary(file);
+      // Uploaded images take priority
       setFormData((prev) => ({ ...prev, coverImageUrl: downloadURL }));
+      setCoverImageUrlInput(''); // Clear URL input when file is uploaded
     } catch (error) {
       console.error('Error uploading cover image:', error);
       setErrors((prev) => ({
@@ -191,6 +194,25 @@ export default function EditPostPage() {
       }));
     } finally {
       setUploadingCover(false);
+    }
+  };
+
+  const handleCoverImageUrlChange = (url: string) => {
+    setCoverImageUrlInput(url);
+    if (url.trim()) {
+      // Validate URL
+      try {
+        new URL(url);
+        setFormData((prev) => ({ ...prev, coverImageUrl: url }));
+        setErrors((prev) => ({ ...prev, coverImage: undefined }));
+      } catch {
+        setErrors((prev) => ({
+          ...prev,
+          coverImage: 'Invalid URL format',
+        }));
+      }
+    } else {
+      setFormData((prev) => ({ ...prev, coverImageUrl: '' }));
     }
   };
 
@@ -451,19 +473,48 @@ export default function EditPostPage() {
               <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Cover Image
               </label>
-              <div className="flex items-start gap-4">
-                <label className="inline-flex cursor-pointer items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800">
-                  {uploadingCover ? 'Uploading...' : 'Choose File'}
+              
+              {/* Upload or URL Input */}
+              <div className="space-y-3">
+                {/* File Upload */}
+                <div>
+                  <label className="inline-flex cursor-pointer items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800">
+                    {uploadingCover ? 'Uploading...' : 'Upload from Computer'}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleCoverImageUpload}
+                      disabled={uploadingCover}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+
+                {/* URL Input */}
+                <div>
+                  <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                    <div className="flex-1 border-t border-gray-300 dark:border-gray-700"></div>
+                    <span>OR</span>
+                    <div className="flex-1 border-t border-gray-300 dark:border-gray-700"></div>
+                  </div>
                   <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleCoverImageUpload}
-                    disabled={uploadingCover}
-                    className="hidden"
+                    type="url"
+                    value={coverImageUrlInput}
+                    onChange={(e) => handleCoverImageUrlChange(e.target.value)}
+                    placeholder="Paste image URL (https://...)"
+                    className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
                   />
-                </label>
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    Upload takes priority if both are provided
+                  </p>
+                </div>
+
+                {/* Preview */}
                 {formData.coverImageUrl && (
-                  <div className="flex-1">
+                  <div className="rounded-lg border border-gray-200 p-4 dark:border-gray-800">
+                    <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Preview:
+                    </p>
                     <img
                       src={formData.coverImageUrl}
                       alt="Cover preview"
@@ -472,8 +523,9 @@ export default function EditPostPage() {
                   </div>
                 )}
               </div>
+
               {errors.coverImage && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                <p className="mt-2 text-sm text-red-600 dark:text-red-400">
                   {errors.coverImage}
                 </p>
               )}
