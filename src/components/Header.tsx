@@ -1,7 +1,9 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { onAuthStateChange, signOut as authSignOut } from '@/lib/auth';
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -12,6 +14,29 @@ const navigation = [
 
 export default function Header() {
   const pathname = usePathname();
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChange((user) => {
+      setIsAuthenticated(!!user);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleSignOut = async () => {
+    setSigningOut(true);
+    try {
+      await authSignOut();
+      router.push('/');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    } finally {
+      setSigningOut(false);
+    }
+  };
 
   return (
     <>
@@ -56,6 +81,37 @@ export default function Header() {
                 </Link>
               );
             })}
+
+            {/* Auth Links */}
+            {isAuthenticated ? (
+              <>
+                <Link
+                  href="/admin"
+                  className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                    pathname === '/admin'
+                      ? 'bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100'
+                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-gray-100'
+                  }`}
+                  aria-current={pathname === '/admin' ? 'page' : undefined}
+                >
+                  Dashboard
+                </Link>
+                <button
+                  onClick={handleSignOut}
+                  disabled={signingOut}
+                  className="rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-50 dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-gray-100"
+                >
+                  {signingOut ? 'Signing out...' : 'Sign out'}
+                </button>
+              </>
+            ) : (
+              <Link
+                href="/login"
+                className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+              >
+                Sign in
+              </Link>
+            )}
           </div>
         </nav>
       </header>
