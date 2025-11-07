@@ -23,7 +23,7 @@ A modern, responsive portfolio website built with Next.js, TypeScript, and Tailw
 
 1. Clone the repository:
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Jarlarex/PersonalPortfolio.git
 cd PersonalPortfolio
 ```
 
@@ -75,7 +75,7 @@ PersonalPortfolio/
 
 This project can be easily deployed to Vercel:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=<your-repo-url>)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Jarlarex/PersonalPortfolio)
 
 ## License
 
