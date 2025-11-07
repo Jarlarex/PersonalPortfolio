@@ -274,6 +274,39 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
 }
 
 /**
+ * Get a post by its ID
+ *
+ * @param id - The post ID
+ * @returns Promise resolving to the post or null if not found
+ *
+ * @example
+ * ```typescript
+ * const post = await getPostById('post-id-123');
+ * ```
+ */
+export async function getPostById(id: string): Promise<Post | null> {
+  ensureDbInitialized();
+
+  if (!id || typeof id !== 'string') {
+    throw new Error('Invalid post ID provided');
+  }
+
+  try {
+    const postRef = doc(db!, 'posts', id);
+    const postSnap = await getDoc(postRef);
+
+    if (!postSnap.exists()) {
+      return null;
+    }
+
+    return docToPost(postSnap);
+  } catch (error) {
+    console.error('Error getting post by ID:', error);
+    throw new Error(`Failed to get post by ID: ${(error as Error).message}`);
+  }
+}
+
+/**
  * Get adjacent posts (previous and next) for navigation
  * Orders by createdAt, so "previous" is older and "next" is newer
  *
