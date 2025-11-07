@@ -5,6 +5,114 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-01-08
+
+### 🎉 Major Updates
+
+#### 🌐 Migrated from Firebase Storage to Cloudinary (FREE)
+
+**Breaking Change:** Firebase Storage completely removed to avoid costs.
+
+**Added:**
+- **Cloudinary Integration** - Free image hosting (25GB storage + 25GB bandwidth/month)
+  - Unsigned upload preset for client-side uploads
+  - Automatic image optimization (WebP, compression, resizing)
+  - Global CDN delivery
+  - No backend API needed
+- **Three-Mode Image Input** - Flexible image handling:
+  1. **Upload to Cloudinary** (Production) - File upload → Cloudinary CDN
+  2. **External URL** (Production) - Paste any HTTPS image URL
+  3. **Inline Data URL** (Dev Only) - Small images <200KB as base64
+- **ImageInsertDialog Component** - Beautiful modal with 3 tabs for image insertion
+- **Dual Cover Image Input** - Upload OR paste URL on New/Edit Post pages
+- **Smart Priority** - Uploaded images take priority over URL input
+- **Comprehensive Documentation** - README section on image handling modes
+
+**Removed:**
+- All Firebase Storage imports and references
+- `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET` environment variable
+- Storage initialization in `src/lib/firebase.ts`
+- Storage deletion logic in admin dashboard
+- Storage security rules from documentation
+
+**Updated:**
+- `src/lib/cloudinary.ts` - New upload helper with validation and fallback
+- `src/components/MarkdownEditor.tsx` - Image button opens modal dialog
+- `src/app/admin/posts/new/page.tsx` - Upload OR URL for cover images
+- `src/app/admin/posts/[id]/edit/page.tsx` - Upload OR URL for cover images
+- `next.config.mjs` - Added Cloudinary to remotePatterns
+- `README.md` - Replaced Storage sections with Cloudinary guide
+- `.env.example` - New Cloudinary environment variables
+
+**Benefits:**
+- ✅ FREE - No Firebase Storage costs
+- ✅ Better Performance - CDN, auto-optimization
+- ✅ More Flexible - 3 input modes for different scenarios
+- ✅ Dev-Friendly - Fallback for local testing
+- ✅ Production-Ready - Clear warnings for dev-only features
+
+#### 🌓 Fixed Dark/Light Mode (SSR-Safe, No Flash)
+
+**Problem:** Theme could flash on page load, not SSR-safe, hydration mismatches.
+
+**Added:**
+- **Pre-Hydration Script** - Inline script in `<head>` sets theme before React hydrates
+  - Checks `localStorage.theme` for saved preference
+  - Falls back to system preference (`prefers-color-scheme`)
+  - Sets/removes `dark` class on `<html>` synchronously
+  - Prevents any flash of incorrect theme
+- **Class-Based Dark Mode** - `darkMode: 'class'` in Tailwind config
+- **Comprehensive Documentation** - README section explaining theme system
+
+**Updated:**
+- `tailwind.config.ts` - Added `darkMode: 'class'`
+- `src/app/layout.tsx` - Added pre-hydration script
+- `src/components/ThemeToggle.tsx` - Simplified, reads DOM state
+- `README.md` - Added Dark/Light Mode section with testing guide
+
+**Benefits:**
+- ✅ Zero Flash - Correct theme on first paint
+- ✅ SSR Compatible - Works with server-side rendering
+- ✅ Persistent - Remembers choice across sessions
+- ✅ System-Aware - Respects OS dark mode preference
+- ✅ Accessible - Proper ARIA labels and focus states
+- ✅ Deterministic - Predictable, reliable behavior
+
+#### 👤 Personalized for Iarfhlaith Feeney (@Jarlarex)
+
+**Updated Site-Wide:**
+- **Metadata** - Title, description, keywords, OG tags
+  - Title: "Iarfhlaith Feeney — Portfolio & Blog"
+  - Description: "Software Developer from Ireland. Also known online as 'Jarlarex'. Building clean web apps, tinkering with data, and writing about code and cars."
+  - Twitter handle: @ifeeney32
+- **Home Hero** - Name, tagline, description
+- **About Page** - Personal bio, interests, skills, social links
+- **Footer** - Description, social links (Twitter, LinkedIn, GitHub, Email)
+- **README** - Updated with personalization notes
+
+**Social Links Added:**
+- Twitter/X: [@ifeeney32](https://x.com/ifeeney32)
+- LinkedIn: [iarfhlaith-feeney](https://linkedin.com/in/iarfhlaith-feeney/)
+- Email: iarfhlaithfeeney@gmail.com
+- GitHub: [Jarlarex](https://github.com/Jarlarex)
+
+### 📚 Documentation
+
+- Updated README with Cloudinary setup instructions
+- Added image handling modes comparison table
+- Dark mode system explanation with testing commands
+- Personalization guide
+- Deployment checklist updated
+
+### 🛠️ Technical Debt
+
+- Removed all Firebase Storage dependencies
+- Cleaned up dead imports
+- Improved type safety in image handling
+- Better error messages and validation
+
+---
+
 ## [1.0.0] - 2025-11-07
 
 ### 🎉 Initial Release
