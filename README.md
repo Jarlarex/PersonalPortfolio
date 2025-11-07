@@ -321,6 +321,63 @@ The blog queries require composite indexes. Firebase will prompt you to create t
 
 **Pro Tip:** When you run queries that need indexes, Firebase provides a direct link in the error message to auto-create the index. This is the easiest method!
 
+## 🌓 Dark/Light Mode (SSR-Safe)
+
+The theme system is designed to be **SSR-safe with zero flash** on page load.
+
+### How It Works
+
+**1. Pre-Hydration Script (in `layout.tsx`):**
+   - Runs immediately in the `<head>` before React hydrates
+   - Checks `localStorage.theme` for saved preference
+   - Falls back to system preference via `matchMedia('(prefers-color-scheme: dark)')`
+   - Adds/removes `dark` class on `<html>` element synchronously
+   - **Result**: Correct theme applied on first paint, no flash
+
+**2. Tailwind Configuration:**
+   - Uses `darkMode: 'class'` in `tailwind.config.ts`
+   - All dark mode styles trigger when `<html>` has `dark` class
+
+**3. ThemeToggle Component:**
+   - Reads initial state from DOM (set by pre-hydration script)
+   - Toggles `dark` class on `<html>` when clicked
+   - Persists choice to `localStorage.theme` as `'light'` or `'dark'`
+   - Accessible with proper ARIA labels and focus states
+
+### Why This Approach?
+
+- ✅ **No Flash**: Theme is set before any content renders
+- ✅ **SSR Compatible**: Works with server-side rendering
+- ✅ **Persistent**: Remembers user's choice across sessions
+- ✅ **System-Aware**: Respects OS preference if no saved choice
+- ✅ **Accessible**: Proper focus states and ARIA labels
+- ✅ **No Layout Shift**: Pre-hydration prevents flicker
+
+### Theme Priority
+
+1. **Saved preference** in `localStorage.theme` (`'light'` or `'dark'`)
+2. **System preference** from `prefers-color-scheme` media query
+3. **Default**: Light mode if neither is available
+
+### Testing Dark Mode
+
+To test the theme system:
+
+```javascript
+// In browser console:
+// Force dark mode
+localStorage.setItem('theme', 'dark');
+location.reload();
+
+// Force light mode
+localStorage.setItem('theme', 'light');
+location.reload();
+
+// Reset to system preference
+localStorage.removeItem('theme');
+location.reload();
+```
+
 ## 📝 Creating Sample Content
 
 After creating your first user, you can create sample blog posts:

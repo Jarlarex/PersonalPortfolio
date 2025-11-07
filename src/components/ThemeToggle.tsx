@@ -3,48 +3,43 @@
 import { useEffect, useState } from 'react';
 
 /**
- * Theme toggle button with localStorage persistence
- * Supports light/dark mode with smooth transitions
+ * SSR-safe theme toggle with no flash
+ * 
+ * Works in conjunction with the pre-hydration script in layout.tsx
+ * to ensure the correct theme is applied before React hydrates.
  */
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [isDark, setIsDark] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  // Load theme from localStorage on mount
+  // Sync with DOM on mount
   useEffect(() => {
     setMounted(true);
-    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
-
-    if (savedTheme) {
-      setTheme(savedTheme);
-      document.documentElement.classList.toggle('dark', savedTheme === 'dark');
-    } else {
-      // Check system preference
-      const prefersDark = window.matchMedia(
-        '(prefers-color-scheme: dark)'
-      ).matches;
-      const initialTheme = prefersDark ? 'dark' : 'light';
-      setTheme(initialTheme);
-      document.documentElement.classList.toggle('dark', prefersDark);
-    }
+    // Read the actual DOM state set by our pre-hydration script
+    setIsDark(document.documentElement.classList.contains('dark'));
   }, []);
 
-  // Toggle theme
   const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
+    const newIsDark = !isDark;
+    setIsDark(newIsDark);
 
-    // Update DOM
-    document.documentElement.classList.toggle('dark', newTheme === 'dark');
-
-    // Persist to localStorage
-    localStorage.setItem('theme', newTheme);
+    // Update DOM immediately
+    if (newIsDark) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
   };
 
-  // Avoid hydration mismatch by not rendering until mounted
+  // Prevent hydration mismatch - render a placeholder until mounted
   if (!mounted) {
     return (
-      <div className="h-9 w-9 rounded-lg border border-gray-300 dark:border-gray-700" />
+      <div
+        className="h-9 w-9 rounded-lg border border-gray-300 dark:border-gray-700"
+        aria-hidden="true"
+      />
     );
   }
 
@@ -52,27 +47,11 @@ export default function ThemeToggle() {
     <button
       onClick={toggleTheme}
       className="rounded-lg border border-gray-300 p-2 transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-gray-700 dark:hover:bg-gray-800"
-      aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-      title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
     >
-      {theme === 'light' ? (
-        // Moon icon for dark mode
-        <svg
-          className="h-5 w-5 text-gray-700 dark:text-gray-300"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-          />
-        </svg>
-      ) : (
-        // Sun icon for light mode
+      {isDark ? (
+        // Sun icon - currently in dark mode, click for light
         <svg
           className="h-5 w-5 text-gray-700 dark:text-gray-300"
           fill="none"
@@ -85,6 +64,22 @@ export default function ThemeToggle() {
             strokeLinejoin="round"
             strokeWidth={2}
             d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+          />
+        </svg>
+      ) : (
+        // Moon icon - currently in light mode, click for dark
+        <svg
+          className="h-5 w-5 text-gray-700 dark:text-gray-300"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
           />
         </svg>
       )}
