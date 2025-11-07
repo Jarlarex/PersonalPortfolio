@@ -11,6 +11,9 @@ A modern, responsive portfolio website built with Next.js, TypeScript, and Tailw
 - 📱 Fully responsive design
 - 🌙 Dark mode support
 - 🔍 SEO optimized with metadata
+- 🔥 Firebase integration (Auth, Firestore, Storage)
+- ✅ Zod schema validation
+- 📚 Utility libraries (slug generation, reading time calculation)
 
 ## Getting Started
 
@@ -32,12 +35,42 @@ cd PersonalPortfolio
 npm install
 ```
 
-3. Run the development server:
+3. Set up Firebase (required for full functionality):
+
+**a. Create a Firebase project:**
+   - Go to [Firebase Console](https://console.firebase.google.com/)
+   - Click "Add project" and follow the setup wizard
+   - Enable Authentication, Firestore Database, and Storage in the Firebase Console
+
+**b. Get your Firebase configuration:**
+   - In Firebase Console, go to Project Settings > General
+   - Scroll down to "Your apps" section
+   - Click the web icon (</>) to add a web app
+   - Copy the configuration values
+
+**c. Create `.env.local` file:**
+   ```bash
+   cp .env.example .env.local
+   ```
+
+**d. Add your Firebase configuration to `.env.local`:**
+   ```env
+   NEXT_PUBLIC_FIREBASE_API_KEY=your_actual_api_key
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+   NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+   ```
+
+   > **Note:** Never commit `.env.local` to version control. It's already in `.gitignore`.
+
+4. Run the development server:
 ```bash
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Available Scripts
 
@@ -54,15 +87,83 @@ PersonalPortfolio/
 ├── public/
 │   └── images/          # Static images
 ├── src/
-│   └── app/
-│       ├── globals.css  # Global styles
-│       ├── layout.tsx   # Root layout
-│       ├── page.tsx     # Home page
-│       └── not-found.tsx # 404 page
+│   ├── app/
+│   │   ├── globals.css  # Global styles
+│   │   ├── layout.tsx   # Root layout
+│   │   ├── page.tsx     # Home page
+│   │   └── not-found.tsx # 404 page
+│   └── lib/
+│       ├── firebase.ts  # Firebase initialization
+│       ├── validators.ts # Zod schemas for validation
+│       ├── slug.ts      # Slug generation utilities
+│       └── time.ts      # Time/date utilities
+├── .env.example         # Environment variables template
 ├── next.config.mjs
 ├── tailwind.config.ts
 └── tsconfig.json
 ```
+
+## Firebase Setup
+
+This project uses Firebase for:
+- **Authentication**: User login and registration
+- **Firestore**: NoSQL database for storing blog posts and data
+- **Storage**: File uploads and media storage
+
+### Firebase Security Rules
+
+After setting up Firebase, configure security rules:
+
+**Firestore Rules** (Database > Rules):
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /posts/{postId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}
+```
+
+**Storage Rules** (Storage > Rules):
+```javascript
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}
+```
+
+## Library Utilities
+
+### Firebase (`src/lib/firebase.ts`)
+- Safe Firebase initialization with environment validation
+- Exports `auth`, `db`, `storage` instances
+- Helper functions: `isFirebaseInitialized()`, `getFirebaseInstances()`
+
+### Validators (`src/lib/validators.ts`)
+- Zod schemas for type-safe post creation/updates
+- Validation helpers with error handling
+- TypeScript types: `CreatePost`, `UpdatePost`, `PostMetadata`
+
+### Slug (`src/lib/slug.ts`)
+- `slugify()`: Convert text to URL-safe slugs
+- `generateSlug()`: Generate slugs with length limits
+- `ensureUniqueSlug()`: Make slugs unique
+- `isValidSlug()`: Validate slug format
+
+### Time (`src/lib/time.ts`)
+- `calculateReadingTime()`: Estimate reading time from text
+- `formatDate()`: Format dates for display
+- `formatRelativeTime()`: "2 days ago" formatting
+- `getReadingTimeText()`: "5 min read" formatting
+- `parseFirestoreTimestamp()`: Convert Firestore timestamps
 
 ## Customization
 
@@ -70,6 +171,7 @@ PersonalPortfolio/
 2. Replace placeholder images in `public/images/`
 3. Modify metadata in `src/app/layout.tsx`
 4. Adjust color scheme in `tailwind.config.ts`
+5. Configure Firebase security rules for your use case
 
 ## Deployment
 
