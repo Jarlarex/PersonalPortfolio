@@ -4,6 +4,7 @@ import Footer from '@/components/Footer';
 import './globals.css';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://yourportfolio.com'),
   title: {
     default: 'Personal Portfolio',
     template: '%s | Personal Portfolio',

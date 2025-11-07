@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { onAuthStateChange, signOut as authSignOut } from '@/lib/auth';
+import ThemeToggle from './ThemeToggle';
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -81,6 +82,9 @@ export default function Header() {
                 </Link>
               );
             })}
+
+            {/* Theme Toggle */}
+            <ThemeToggle />
 
             {/* Auth Links */}
             {isAuthenticated ? (

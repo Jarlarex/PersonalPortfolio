@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Container from '@/components/Container';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import TagChip from '@/components/TagChip';
+import ReadingProgress from '@/components/ReadingProgress';
 import { getPostBySlug, getAdjacentPosts } from '@/lib/posts';
 import { formatDate, getReadingTimeText } from '@/lib/time';
 
@@ -77,6 +78,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <>
+      <ReadingProgress />
       <Container as="article" id="main-content" className="py-12">
         <div className="mx-auto max-w-4xl">
           {/* Back to Blog */}
