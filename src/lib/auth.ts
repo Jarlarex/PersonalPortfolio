@@ -185,4 +185,3 @@ export function waitForAuth(): Promise<User | null> {
     });
   });
 }
-

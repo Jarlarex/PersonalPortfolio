@@ -105,7 +105,9 @@ export default function NewPostPage() {
     }
   };
 
-  const handleCoverImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCoverImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = e.target.files?.[0];
     if (!file || !storage) return;
 
@@ -145,7 +147,8 @@ export default function NewPostPage() {
     if (!formData.slug) {
       newErrors.slug = 'Slug is required';
     } else if (!isValidSlug(formData.slug)) {
-      newErrors.slug = 'Slug must be URL-safe (lowercase, numbers, hyphens only)';
+      newErrors.slug =
+        'Slug must be URL-safe (lowercase, numbers, hyphens only)';
     }
 
     // Content validation
@@ -187,7 +190,9 @@ export default function NewPostPage() {
       const postData = {
         title: formData.title.trim(),
         slug: formData.slug.trim(),
-        excerpt: formData.excerpt.trim() || formData.content.substring(0, 150).trim() + '...',
+        excerpt:
+          formData.excerpt.trim() ||
+          formData.content.substring(0, 150).trim() + '...',
         content: formData.content.trim(),
         tags: tagsArray,
         coverImageUrl: formData.coverImageUrl || undefined,
@@ -228,7 +233,9 @@ export default function NewPostPage() {
             </h1>
             {lastSaved && (
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                {autoSaving ? 'Saving...' : `Last saved at ${lastSaved.toLocaleTimeString()}`}
+                {autoSaving
+                  ? 'Saving...'
+                  : `Last saved at ${lastSaved.toLocaleTimeString()}`}
               </p>
             )}
           </div>
@@ -248,12 +255,16 @@ export default function NewPostPage() {
                 value={formData.title}
                 onChange={(e) => handleChange('title', e.target.value)}
                 className={`w-full rounded-lg border ${
-                  errors.title ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'
+                  errors.title
+                    ? 'border-red-500'
+                    : 'border-gray-300 dark:border-gray-700'
                 } bg-white px-4 py-3 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-900 dark:text-gray-100`}
                 placeholder="Enter post title"
               />
               {errors.title && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.title}</p>
+                <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                  {errors.title}
+                </p>
               )}
             </div>
 
@@ -271,15 +282,20 @@ export default function NewPostPage() {
                 value={formData.slug}
                 onChange={(e) => handleChange('slug', e.target.value)}
                 className={`w-full rounded-lg border ${
-                  errors.slug ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'
+                  errors.slug
+                    ? 'border-red-500'
+                    : 'border-gray-300 dark:border-gray-700'
                 } bg-white px-4 py-3 font-mono text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-900 dark:text-gray-100`}
                 placeholder="url-safe-slug"
               />
               {errors.slug && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.slug}</p>
+                <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                  {errors.slug}
+                </p>
               )}
               <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                Auto-generated from title. Use lowercase, numbers, and hyphens only.
+                Auto-generated from title. Use lowercase, numbers, and hyphens
+                only.
               </p>
             </div>
 
@@ -297,12 +313,16 @@ export default function NewPostPage() {
                 onChange={(e) => handleChange('excerpt', e.target.value)}
                 rows={3}
                 className={`w-full rounded-lg border ${
-                  errors.excerpt ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'
+                  errors.excerpt
+                    ? 'border-red-500'
+                    : 'border-gray-300 dark:border-gray-700'
                 } bg-white px-4 py-3 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-900 dark:text-gray-100`}
                 placeholder="Short summary of the post (optional, will use first 150 chars if empty)"
               />
               {errors.excerpt && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.excerpt}</p>
+                <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                  {errors.excerpt}
+                </p>
               )}
             </div>
 
@@ -371,7 +391,9 @@ export default function NewPostPage() {
                 placeholder="Write your post content in Markdown..."
               />
               {errors.content && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.content}</p>
+                <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                  {errors.content}
+                </p>
               )}
             </div>
 
@@ -422,4 +444,3 @@ export default function NewPostPage() {
     </Protected>
   );
 }
-

@@ -133,4 +133,3 @@ export function validatePost<T>(data: unknown, schema: z.ZodSchema<T>) {
     };
   }
 }
-

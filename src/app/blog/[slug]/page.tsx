@@ -63,8 +63,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   // Fetch adjacent posts for navigation
-  let adjacentPosts: { previous: typeof post | null; next: typeof post | null } =
-    { previous: null, next: null };
+  let adjacentPosts: {
+    previous: typeof post | null;
+    next: typeof post | null;
+  } = { previous: null, next: null };
   try {
     adjacentPosts = await getAdjacentPosts(slug);
   } catch (error) {
@@ -105,7 +107,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
           {/* Post Header */}
           <header className="mb-8">
-            <h1 className="mb-4 text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl">
+            <h1 className="mb-4 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl dark:text-gray-100">
               {post.title}
             </h1>
 
@@ -162,9 +164,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               <div className="flex gap-3">
                 <a
                   href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
-                    typeof window !== 'undefined'
-                      ? window.location.href
-                      : ''
+                    typeof window !== 'undefined' ? window.location.href : ''
                   )}&text=${encodeURIComponent(post.title)}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -174,9 +174,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 </a>
                 <a
                   href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-                    typeof window !== 'undefined'
-                      ? window.location.href
-                      : ''
+                    typeof window !== 'undefined' ? window.location.href : ''
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -232,4 +230,3 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     </>
   );
 }
-

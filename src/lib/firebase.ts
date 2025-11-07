@@ -15,7 +15,14 @@ const requiredEnvVars = [
 
 function validateFirebaseConfig() {
   const missing = requiredEnvVars.filter(
-    (envVar) => !process.env[envVar] || process.env[envVar] === 'YOUR_KEY' || process.env[envVar] === 'YOUR_DOMAIN' || process.env[envVar] === 'YOUR_PROJECT_ID' || process.env[envVar] === 'YOUR_BUCKET' || process.env[envVar] === 'YOUR_SENDER' || process.env[envVar] === 'YOUR_APP_ID'
+    (envVar) =>
+      !process.env[envVar] ||
+      process.env[envVar] === 'YOUR_KEY' ||
+      process.env[envVar] === 'YOUR_DOMAIN' ||
+      process.env[envVar] === 'YOUR_PROJECT_ID' ||
+      process.env[envVar] === 'YOUR_BUCKET' ||
+      process.env[envVar] === 'YOUR_SENDER' ||
+      process.env[envVar] === 'YOUR_APP_ID'
   );
 
   if (missing.length > 0) {
@@ -91,4 +98,3 @@ export function getFirebaseInstances() {
     storage: storage!,
   };
 }
-

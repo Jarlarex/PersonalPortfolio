@@ -49,7 +49,9 @@ export default function BlogContent() {
 
       // Store cursor for next page
       if (result.lastDoc && result.hasMore) {
-        setCursors((prev) => new Map(prev).set(currentPage + 1, result.lastDoc));
+        setCursors((prev) =>
+          new Map(prev).set(currentPage + 1, result.lastDoc)
+        );
       }
     } catch (err) {
       console.error('Error fetching posts:', err);
@@ -242,4 +244,3 @@ export default function BlogContent() {
     </>
   );
 }
-

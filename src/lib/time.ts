@@ -27,8 +27,9 @@ export function calculateReadingTime(
     .trim();
 
   // Count words (split by whitespace)
-  const wordCount = cleanText.split(/\s+/).filter((word) => word.length > 0)
-    .length;
+  const wordCount = cleanText
+    .split(/\s+/)
+    .filter((word) => word.length > 0).length;
 
   // Calculate reading time in minutes (minimum 1 minute)
   const readingTime = Math.ceil(wordCount / wordsPerMinute);
@@ -155,4 +156,3 @@ export function parseFirestoreTimestamp(timestamp: {
 }): Date {
   return new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
 }
-

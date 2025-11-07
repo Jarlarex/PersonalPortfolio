@@ -13,15 +13,16 @@ export default function ReadingProgress() {
     const updateProgress = () => {
       // Get scroll position
       const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const docHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
       const scrollPercent = (scrollTop / docHeight) * 100;
-      
+
       setProgress(Math.min(scrollPercent, 100));
     };
 
     // Update on scroll
     window.addEventListener('scroll', updateProgress, { passive: true });
-    
+
     // Initial calculation
     updateProgress();
 
@@ -44,4 +45,3 @@ export default function ReadingProgress() {
     </div>
   );
 }
-

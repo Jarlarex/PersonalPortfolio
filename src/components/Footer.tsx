@@ -55,7 +55,9 @@ export default function Footer() {
                     <Link
                       href={link.href}
                       className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
-                      target={link.href.startsWith('http') ? '_blank' : undefined}
+                      target={
+                        link.href.startsWith('http') ? '_blank' : undefined
+                      }
                       rel={
                         link.href.startsWith('http')
                           ? 'noopener noreferrer'
@@ -80,4 +82,3 @@ export default function Footer() {
     </footer>
   );
 }
-

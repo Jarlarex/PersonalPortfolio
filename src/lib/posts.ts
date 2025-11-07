@@ -96,7 +96,9 @@ export interface AdjacentPosts {
  */
 class DatabaseNotInitializedError extends Error {
   constructor() {
-    super('Firestore database is not initialized. Check Firebase configuration.');
+    super(
+      'Firestore database is not initialized. Check Firebase configuration.'
+    );
     this.name = 'DatabaseNotInitializedError';
   }
 }
@@ -123,9 +125,7 @@ function ensureDbInitialized(): void {
 /**
  * Convert Firestore document to Post object
  */
-function docToPost(
-  docSnapshot: QueryDocumentSnapshot<DocumentData>
-): Post {
+function docToPost(docSnapshot: QueryDocumentSnapshot<DocumentData>): Post {
   const data = docSnapshot.data();
   return {
     id: docSnapshot.id,
@@ -167,12 +167,7 @@ export async function listPublishedPosts(
 ): Promise<ListPostsResult> {
   ensureDbInitialized();
 
-  const {
-    limit: limitCount = 10,
-    cursor,
-    tag,
-    search,
-  } = options;
+  const { limit: limitCount = 10, cursor, tag, search } = options;
 
   try {
     const postsRef = collection(db!, 'posts');
@@ -221,9 +216,8 @@ export async function listPublishedPosts(
     }
 
     // Get the last document for pagination
-    const lastDoc = posts.length > 0 
-      ? querySnapshot.docs[posts.length - 1] 
-      : null;
+    const lastDoc =
+      posts.length > 0 ? querySnapshot.docs[posts.length - 1] : null;
 
     return {
       posts,
@@ -232,7 +226,9 @@ export async function listPublishedPosts(
     };
   } catch (error) {
     console.error('Error listing published posts:', error);
-    throw new Error(`Failed to list published posts: ${(error as Error).message}`);
+    throw new Error(
+      `Failed to list published posts: ${(error as Error).message}`
+    );
   }
 }
 
@@ -360,7 +356,9 @@ export async function getAdjacentPosts(slug: string): Promise<AdjacentPosts> {
       throw error;
     }
     console.error('Error getting adjacent posts:', error);
-    throw new Error(`Failed to get adjacent posts: ${(error as Error).message}`);
+    throw new Error(
+      `Failed to get adjacent posts: ${(error as Error).message}`
+    );
   }
 }
 
@@ -395,7 +393,9 @@ export async function createPost(
 
   // Validate required fields
   if (!data.title || !data.slug || !data.excerpt || !data.content) {
-    throw new Error('Missing required fields: title, slug, excerpt, and content are required');
+    throw new Error(
+      'Missing required fields: title, slug, excerpt, and content are required'
+    );
   }
 
   // Check if slug already exists
@@ -590,9 +590,8 @@ export async function listAllMyPosts(
     }
 
     // Get the last document for pagination
-    const lastDoc = posts.length > 0
-      ? querySnapshot.docs[posts.length - 1]
-      : null;
+    const lastDoc =
+      posts.length > 0 ? querySnapshot.docs[posts.length - 1] : null;
 
     return {
       posts,
@@ -609,4 +608,3 @@ export async function listAllMyPosts(
  * Export custom error classes for external use
  */
 export { DatabaseNotInitializedError, PostNotFoundError };
-

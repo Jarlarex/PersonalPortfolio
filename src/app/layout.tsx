@@ -11,13 +11,7 @@ export const metadata: Metadata = {
   },
   description:
     'A modern portfolio website showcasing my projects, blog posts, and professional experience.',
-  keywords: [
-    'portfolio',
-    'web development',
-    'next.js',
-    'react',
-    'typescript',
-  ],
+  keywords: ['portfolio', 'web development', 'next.js', 'react', 'typescript'],
   authors: [{ name: 'Your Name' }],
   creator: 'Your Name',
   openGraph: {
@@ -75,4 +69,3 @@ export default function RootLayout({
     </html>
   );
 }
-

@@ -61,7 +61,7 @@ export default function AboutPage() {
       <div className="mx-auto max-w-4xl">
         {/* Header Section */}
         <div className="mb-12 text-center">
-          <h1 className="mb-4 text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl">
+          <h1 className="mb-4 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl dark:text-gray-100">
             About Me
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400">
@@ -169,4 +169,3 @@ export default function AboutPage() {
     </Container>
   );
 }
-

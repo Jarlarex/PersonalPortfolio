@@ -64,4 +64,3 @@ export default function TagChip({
 
   return <span className={className}>{content}</span>;
 }
-

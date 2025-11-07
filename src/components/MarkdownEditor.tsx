@@ -26,15 +26,24 @@ export default function MarkdownEditor({
   /**
    * Insert text at cursor position
    */
-  const insertAtCursor = (before: string, after: string = '', placeholder: string = '') => {
+  const insertAtCursor = (
+    before: string,
+    after: string = '',
+    placeholder: string = ''
+  ) => {
     const textarea = textareaRef.current;
     if (!textarea) return;
 
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     const selectedText = value.substring(start, end) || placeholder;
-    const newText = value.substring(0, start) + before + selectedText + after + value.substring(end);
-    
+    const newText =
+      value.substring(0, start) +
+      before +
+      selectedText +
+      after +
+      value.substring(end);
+
     onChange(newText);
 
     // Set cursor position after insertion
@@ -54,20 +63,22 @@ export default function MarkdownEditor({
 
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
-    
+
     // Find line boundaries
     const beforeSelection = value.substring(0, start);
     const selection = value.substring(start, end);
     const afterSelection = value.substring(end);
-    
+
     const lastNewlineBeforeStart = beforeSelection.lastIndexOf('\n');
-    const lineStart = lastNewlineBeforeStart === -1 ? 0 : lastNewlineBeforeStart + 1;
-    
+    const lineStart =
+      lastNewlineBeforeStart === -1 ? 0 : lastNewlineBeforeStart + 1;
+
     const lines = value.substring(lineStart, end).split('\n');
-    const modifiedLines = lines.map(line => prefix + line);
+    const modifiedLines = lines.map((line) => prefix + line);
     const modifiedText = modifiedLines.join('\n');
-    
-    const newText = value.substring(0, lineStart) + modifiedText + afterSelection;
+
+    const newText =
+      value.substring(0, lineStart) + modifiedText + afterSelection;
     onChange(newText);
 
     setTimeout(() => {
@@ -92,14 +103,14 @@ export default function MarkdownEditor({
       const timestamp = Date.now();
       const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
       const filePath = `blog-images/${timestamp}_${sanitizedName}`;
-      
+
       // Upload to Storage
       const storageRef = ref(storage, filePath);
       await uploadBytes(storageRef, file);
-      
+
       // Get download URL
       const downloadURL = await getDownloadURL(storageRef);
-      
+
       // Insert markdown image syntax
       const altText = sanitizedName.replace(/\.[^/.]+$/, ''); // Remove extension
       insertAtCursor(`![${altText}](${downloadURL})`);
@@ -199,10 +210,10 @@ export default function MarkdownEditor({
             {button.label}
           </button>
         ))}
-        
+
         {/* Divider */}
         <div className="mx-1 w-px bg-gray-300 dark:bg-gray-700" />
-        
+
         {/* Image Upload Button */}
         <button
           type="button"
@@ -231,7 +242,7 @@ export default function MarkdownEditor({
             value={value}
             onChange={(e) => onChange(e.target.value)}
             placeholder={placeholder}
-            className="min-h-[500px] w-full rounded-b-lg border border-gray-300 bg-white p-4 font-mono text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 lg:rounded-bl-lg lg:rounded-br-none"
+            className="min-h-[500px] w-full rounded-b-lg border border-gray-300 bg-white p-4 font-mono text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 lg:rounded-bl-lg lg:rounded-br-none dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
             style={{ resize: 'vertical' }}
           />
           <div className="absolute bottom-2 right-2 text-xs text-gray-400">
@@ -240,7 +251,7 @@ export default function MarkdownEditor({
         </div>
 
         {/* Right Pane: Live Preview */}
-        <div className="rounded-b-lg border border-gray-300 bg-white p-4 dark:border-gray-700 dark:bg-gray-900 lg:rounded-bl-none lg:rounded-br-lg">
+        <div className="rounded-b-lg border border-gray-300 bg-white p-4 lg:rounded-bl-none lg:rounded-br-lg dark:border-gray-700 dark:bg-gray-900">
           <div className="mb-2 text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">
             Preview
           </div>
@@ -258,4 +269,3 @@ export default function MarkdownEditor({
     </div>
   );
 }
-

@@ -8,7 +8,7 @@ export default function BlogPage() {
       <div className="mx-auto max-w-6xl">
         {/* Header */}
         <div className="mb-12 text-center">
-          <h1 className="mb-4 text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl">
+          <h1 className="mb-4 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl dark:text-gray-100">
             Blog
           </h1>
           <p className="mx-auto max-w-2xl text-xl text-gray-600 dark:text-gray-400">

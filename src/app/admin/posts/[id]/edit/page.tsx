@@ -39,7 +39,7 @@ export default function EditPostPage() {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [originalSlug, setOriginalSlug] = useState<string>('');
-  
+
   const [formData, setFormData] = useState<FormData>({
     title: '',
     slug: '',
@@ -49,7 +49,7 @@ export default function EditPostPage() {
     coverImageUrl: '',
     published: false,
   });
-  
+
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
@@ -117,7 +117,10 @@ export default function EditPostPage() {
       try {
         setAutoSaving(true);
         // Save to localStorage with post ID
-        localStorage.setItem(`draft-edit-post-${postId}`, JSON.stringify(formData));
+        localStorage.setItem(
+          `draft-edit-post-${postId}`,
+          JSON.stringify(formData)
+        );
         setLastSaved(new Date());
       } catch (error) {
         console.error('Auto-save failed:', error);
@@ -132,7 +135,7 @@ export default function EditPostPage() {
   // Load draft from localStorage on mount
   useEffect(() => {
     if (!postId) return;
-    
+
     const draft = localStorage.getItem(`draft-edit-post-${postId}`);
     if (draft) {
       try {
@@ -158,7 +161,9 @@ export default function EditPostPage() {
     }
   };
 
-  const handleCoverImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCoverImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = e.target.files?.[0];
     if (!file || !storage) return;
 
@@ -198,7 +203,8 @@ export default function EditPostPage() {
     if (!formData.slug) {
       newErrors.slug = 'Slug is required';
     } else if (!isValidSlug(formData.slug)) {
-      newErrors.slug = 'Slug must be URL-safe (lowercase, numbers, hyphens only)';
+      newErrors.slug =
+        'Slug must be URL-safe (lowercase, numbers, hyphens only)';
     }
 
     // Content validation
@@ -240,7 +246,9 @@ export default function EditPostPage() {
       const postData = {
         title: formData.title.trim(),
         slug: formData.slug.trim(),
-        excerpt: formData.excerpt.trim() || formData.content.substring(0, 150).trim() + '...',
+        excerpt:
+          formData.excerpt.trim() ||
+          formData.content.substring(0, 150).trim() + '...',
         content: formData.content.trim(),
         tags: tagsArray,
         coverImageUrl: formData.coverImageUrl || undefined,
@@ -277,7 +285,9 @@ export default function EditPostPage() {
           <div className="flex items-center justify-center py-24">
             <div className="text-center">
               <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-gray-200 border-t-blue-600 dark:border-gray-700"></div>
-              <p className="text-gray-600 dark:text-gray-400">Loading post...</p>
+              <p className="text-gray-600 dark:text-gray-400">
+                Loading post...
+              </p>
             </div>
           </div>
         </Container>
@@ -319,7 +329,9 @@ export default function EditPostPage() {
             </h1>
             {lastSaved && (
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                {autoSaving ? 'Saving...' : `Last saved at ${lastSaved.toLocaleTimeString()}`}
+                {autoSaving
+                  ? 'Saving...'
+                  : `Last saved at ${lastSaved.toLocaleTimeString()}`}
               </p>
             )}
           </div>
@@ -339,12 +351,16 @@ export default function EditPostPage() {
                 value={formData.title}
                 onChange={(e) => handleChange('title', e.target.value)}
                 className={`w-full rounded-lg border ${
-                  errors.title ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'
+                  errors.title
+                    ? 'border-red-500'
+                    : 'border-gray-300 dark:border-gray-700'
                 } bg-white px-4 py-3 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-900 dark:text-gray-100`}
                 placeholder="Enter post title"
               />
               {errors.title && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.title}</p>
+                <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                  {errors.title}
+                </p>
               )}
             </div>
 
@@ -362,15 +378,20 @@ export default function EditPostPage() {
                 value={formData.slug}
                 onChange={(e) => handleChange('slug', e.target.value)}
                 className={`w-full rounded-lg border ${
-                  errors.slug ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'
+                  errors.slug
+                    ? 'border-red-500'
+                    : 'border-gray-300 dark:border-gray-700'
                 } bg-white px-4 py-3 font-mono text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-900 dark:text-gray-100`}
                 placeholder="url-safe-slug"
               />
               {errors.slug && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.slug}</p>
+                <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                  {errors.slug}
+                </p>
               )}
               <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                Use lowercase, numbers, and hyphens only. Changing this will change the URL.
+                Use lowercase, numbers, and hyphens only. Changing this will
+                change the URL.
               </p>
             </div>
 
@@ -388,12 +409,16 @@ export default function EditPostPage() {
                 onChange={(e) => handleChange('excerpt', e.target.value)}
                 rows={3}
                 className={`w-full rounded-lg border ${
-                  errors.excerpt ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'
+                  errors.excerpt
+                    ? 'border-red-500'
+                    : 'border-gray-300 dark:border-gray-700'
                 } bg-white px-4 py-3 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-900 dark:text-gray-100`}
                 placeholder="Short summary of the post (optional, will use first 150 chars if empty)"
               />
               {errors.excerpt && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.excerpt}</p>
+                <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                  {errors.excerpt}
+                </p>
               )}
             </div>
 
@@ -462,7 +487,9 @@ export default function EditPostPage() {
                 placeholder="Write your post content in Markdown..."
               />
               {errors.content && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.content}</p>
+                <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                  {errors.content}
+                </p>
               )}
             </div>
 
@@ -490,7 +517,7 @@ export default function EditPostPage() {
               >
                 Cancel
               </button>
-              
+
               {formData.published && (
                 <button
                   type="button"
@@ -501,7 +528,7 @@ export default function EditPostPage() {
                   {submitting ? 'Unpublishing...' : 'Unpublish'}
                 </button>
               )}
-              
+
               <button
                 type="submit"
                 disabled={submitting}
@@ -509,7 +536,7 @@ export default function EditPostPage() {
               >
                 {submitting ? 'Saving...' : 'Save Changes'}
               </button>
-              
+
               {!formData.published && (
                 <button
                   type="button"
@@ -527,4 +554,3 @@ export default function EditPostPage() {
     </Protected>
   );
 }
-

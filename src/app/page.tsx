@@ -21,13 +21,13 @@ export default function Home() {
             />
           </div>
         </div>
-        <h1 className="mb-4 text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-6xl md:text-7xl">
+        <h1 className="mb-4 text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl md:text-7xl dark:text-gray-100">
           Hi, I&apos;m{' '}
           <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Your Name
           </span>
         </h1>
-        <p className="mb-8 text-xl text-gray-600 dark:text-gray-400 sm:text-2xl">
+        <p className="mb-8 text-xl text-gray-600 sm:text-2xl dark:text-gray-400">
           Full-Stack Developer & Creative Problem Solver
         </p>
         <p className="mx-auto mb-12 max-w-2xl text-lg text-gray-600 dark:text-gray-400">
@@ -52,4 +52,3 @@ export default function Home() {
     </Container>
   );
 }
-
