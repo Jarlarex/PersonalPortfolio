@@ -1,9 +1,14 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import Container from '@/components/Container';
 
 export default function Home() {
   return (
-    <div className="flex min-h-[calc(100vh-16rem)] items-center justify-center py-12">
+    <Container
+      as="main"
+      id="main-content"
+      className="flex min-h-[calc(100vh-16rem)] items-center justify-center py-12"
+    >
       <div className="mx-auto max-w-4xl text-center">
         <div className="mb-8 flex justify-center">
           <div className="relative h-32 w-32 overflow-hidden rounded-full border-4 border-gray-200 dark:border-gray-800">
@@ -44,7 +49,7 @@ export default function Home() {
           </Link>
         </div>
       </div>
-    </div>
+    </Container>
   );
 }
 

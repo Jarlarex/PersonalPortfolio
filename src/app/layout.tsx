@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -64,42 +66,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased">
         <div className="flex min-h-screen flex-col">
-          <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-sm dark:border-gray-800 dark:bg-gray-950/80">
-            <nav className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center gap-2">
-                <a href="/" className="text-xl font-bold">
-                  Portfolio
-                </a>
-              </div>
-              <div className="flex items-center gap-6">
-                <a
-                  href="/blog"
-                  className="text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
-                >
-                  Blog
-                </a>
-                <a
-                  href="/projects"
-                  className="text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
-                >
-                  Projects
-                </a>
-              </div>
-            </nav>
-          </header>
-          <main className="flex-1">
-            <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              {children}
-            </div>
-          </main>
-          <footer className="border-t border-gray-200 py-8 dark:border-gray-800">
-            <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-                © {new Date().getFullYear()} Personal Portfolio. All rights
-                reserved.
-              </p>
-            </div>
-          </footer>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
         </div>
       </body>
     </html>
