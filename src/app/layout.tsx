@@ -4,40 +4,51 @@ import Footer from '@/components/Footer';
 import './globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://yourportfolio.com'),
+  metadataBase: new URL('https://yourportfolio.com'), // TODO: Update with your production domain
   title: {
-    default: 'Personal Portfolio',
-    template: '%s | Personal Portfolio',
+    default: 'Iarfhlaith Feeney — Portfolio & Blog',
+    template: '%s | Iarfhlaith Feeney',
   },
   description:
-    'A modern portfolio website showcasing my projects, blog posts, and professional experience.',
-  keywords: ['portfolio', 'web development', 'next.js', 'react', 'typescript'],
-  authors: [{ name: 'Your Name' }],
-  creator: 'Your Name',
+    "Software Developer from Ireland. Also known online as 'Jarlarex'. Building clean web apps, tinkering with data, and writing about code and cars.",
+  keywords: [
+    'Iarfhlaith Feeney',
+    'Jarlarex',
+    'software developer',
+    'Ireland',
+    'web development',
+    'next.js',
+    'react',
+    'typescript',
+    'data',
+    'motorsport',
+  ],
+  authors: [{ name: 'Iarfhlaith Feeney', url: 'https://x.com/ifeeney32' }],
+  creator: 'Iarfhlaith Feeney',
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://yourportfolio.com',
-    title: 'Personal Portfolio',
+    title: 'Iarfhlaith Feeney — Portfolio & Blog',
     description:
-      'A modern portfolio website showcasing my projects, blog posts, and professional experience.',
-    siteName: 'Personal Portfolio',
+      "Software Developer from Ireland. Also known online as 'Jarlarex'. Building clean web apps, tinkering with data, and writing about code and cars.",
+    siteName: 'Iarfhlaith Feeney — Portfolio & Blog',
     images: [
       {
         url: '/images/og-default.jpg',
         width: 1200,
         height: 630,
-        alt: 'Personal Portfolio',
+        alt: 'Iarfhlaith Feeney — Portfolio & Blog',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Personal Portfolio',
+    title: 'Iarfhlaith Feeney — Portfolio & Blog',
     description:
-      'A modern portfolio website showcasing my projects, blog posts, and professional experience.',
+      "Software Developer from Ireland. Also known online as 'Jarlarex'. Building clean web apps, tinkering with data, and writing about code and cars.",
     images: ['/images/og-default.jpg'],
-    creator: '@yourusername',
+    creator: '@ifeeney32',
   },
   robots: {
     index: true,

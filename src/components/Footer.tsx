@@ -14,9 +14,9 @@ const footerLinks = [
     title: 'Connect',
     links: [
       { name: 'GitHub', href: 'https://github.com/Jarlarex' },
-      { name: 'LinkedIn', href: '#' },
-      { name: 'Twitter', href: '#' },
-      { name: 'Email', href: 'mailto:hello@example.com' },
+      { name: 'LinkedIn', href: 'https://linkedin.com/in/iarfhlaith-feeney/' },
+      { name: 'Twitter/X', href: 'https://x.com/ifeeney32' },
+      { name: 'Email', href: 'mailto:iarfhlaithfeeney@gmail.com' },
     ],
   },
 ];
@@ -37,9 +37,8 @@ export default function Footer() {
               Portfolio
             </Link>
             <p className="mt-4 max-w-md text-sm text-gray-600 dark:text-gray-400">
-              A modern portfolio showcasing projects, blog posts, and
-              professional experience. Built with Next.js, TypeScript, and
-              Tailwind CSS.
+              Software Developer from Ireland (@Jarlarex). Building clean web
+              apps, tinkering with data, and writing about code and cars.
             </p>
           </div>
 
@@ -75,7 +74,7 @@ export default function Footer() {
 
         <div className="mt-12 border-t border-gray-200 pt-8 dark:border-gray-800">
           <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-            © {currentYear} Personal Portfolio. All rights reserved.
+            © {currentYear} Iarfhlaith Feeney. Built with Next.js & TypeScript.
           </p>
         </div>
       </div>

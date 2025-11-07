@@ -24,15 +24,15 @@ export default function Home() {
         <h1 className="mb-4 text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl md:text-7xl dark:text-gray-100">
           Hi, I&apos;m{' '}
           <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Your Name
+            Iarfhlaith Feeney
           </span>
         </h1>
         <p className="mb-8 text-xl text-gray-600 sm:text-2xl dark:text-gray-400">
-          Full-Stack Developer & Creative Problem Solver
+          Software Developer · Ireland · @Jarlarex
         </p>
         <p className="mx-auto mb-12 max-w-2xl text-lg text-gray-600 dark:text-gray-400">
-          I build modern web applications with cutting-edge technologies.
-          Passionate about clean code, user experience, and continuous learning.
+          Building clean web apps, tinkering with data, and writing about code and cars.
+          Passionate about creating elegant solutions to complex problems.
         </p>
         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Link

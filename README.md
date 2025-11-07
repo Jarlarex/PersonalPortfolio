@@ -11,7 +11,7 @@ A modern, full-featured portfolio website with blog, admin dashboard, and Fireba
 
 A production-ready portfolio website featuring a blog with markdown editor, authentication system, admin dashboard, and full Firebase integration. Built with modern web technologies and best practices for performance, accessibility, and SEO.
 
-**Live Demo:** [yourportfolio.com](https://yourportfolio.com)
+**Live Demo:** Coming soon (update with your production domain)
 
 ## ✨ Features
 
@@ -512,9 +512,10 @@ To add your own:
    - Update social media handles
 
 3. **Update domain:**
-   - Replace `https://yourportfolio.com` throughout the codebase
-   - Update in `src/app/layout.tsx`
-   - Update in `public/robots.txt`
+   - Replace `https://yourportfolio.com` with your actual domain in:
+     - `src/app/layout.tsx` (metadataBase)
+     - `public/robots.txt` (Sitemap URL)
+     - Any OG meta tags
 
 ### Styling
 
