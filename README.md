@@ -94,6 +94,7 @@ PersonalPortfolio/
 │   │   └── not-found.tsx # 404 page
 │   └── lib/
 │       ├── firebase.ts  # Firebase initialization
+│       ├── posts.ts     # Firestore data layer for posts
 │       ├── validators.ts # Zod schemas for validation
 │       ├── slug.ts      # Slug generation utilities
 │       └── time.ts      # Time/date utilities
@@ -140,6 +141,43 @@ service firebase.storage {
 }
 ```
 
+### Required Firestore Indexes
+
+The blog post queries require composite indexes. Create these in Firebase Console (Firestore Database > Indexes):
+
+**Index 1: Published posts ordered by creation date**
+- Collection: `posts`
+- Fields indexed:
+  - `published` (Ascending)
+  - `createdAt` (Descending)
+
+**Index 2: Published posts filtered by tag**
+- Collection: `posts`
+- Fields indexed:
+  - `published` (Ascending)
+  - `tags` (Arrays)
+  - `createdAt` (Descending)
+
+**Index 3: Published posts for adjacent navigation (previous)**
+- Collection: `posts`
+- Fields indexed:
+  - `published` (Ascending)
+  - `createdAt` (Descending)
+
+**Index 4: Published posts for adjacent navigation (next)**
+- Collection: `posts`
+- Fields indexed:
+  - `published` (Ascending)
+  - `createdAt` (Ascending)
+
+**Index 5: User's posts by update time**
+- Collection: `posts`
+- Fields indexed:
+  - `authorId` (Ascending)
+  - `updatedAt` (Descending)
+
+> **Note:** Firebase will prompt you to create indexes automatically when you run queries that require them. Click the provided link in the error message to auto-generate the index.
+
 ## Library Utilities
 
 ### Firebase (`src/lib/firebase.ts`)
@@ -164,6 +202,16 @@ service firebase.storage {
 - `formatRelativeTime()`: "2 days ago" formatting
 - `getReadingTimeText()`: "5 min read" formatting
 - `parseFirestoreTimestamp()`: Convert Firestore timestamps
+
+### Posts (`src/lib/posts.ts`)
+- `listPublishedPosts()`: Get paginated published posts with filtering
+- `getPostBySlug()`: Fetch a single post by slug
+- `getAdjacentPosts()`: Get previous/next posts for navigation
+- `createPost()`: Create a new blog post
+- `updatePost()`: Update an existing post
+- `deletePost()`: Delete a post
+- `listAllMyPosts()`: Get all posts by a user
+- Full TypeScript types and JSDoc documentation
 
 ## Customization
 
